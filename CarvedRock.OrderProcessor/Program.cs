@@ -1,15 +1,21 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
-using System;
 
-namespace CarvedRock.Api
+namespace CarvedRock.OrderProcessor
 {
     public class Program
     {
-        public static int Main(string[] args)
+        public static void Main(string[] args)
         {
+            IHost host = Host.CreateDefaultBuilder(args)
+                .ConfigureServices(services =>
+                {
+                    services.AddHostedService<Worker>();
+                })
+                .UseSerilog()
+                .Build();
+
+
             var name = typeof(Program).Assembly.GetName().Name;
 
             Log.Logger = new LoggerConfiguration()
@@ -23,27 +29,17 @@ namespace CarvedRock.Api
 
             try
             {
-                Log.Information("Starting web host");
-                CreateHostBuilder(args).Build().Run();
-                return 0;
+                Log.Information("Starting host");
+                host.Run();
             }
             catch (Exception ex)
             {
                 Log.Fatal(ex, "Host terminated unexpectedly");
-                return 1;
             }
             finally
             {
                 Log.CloseAndFlush();
             }
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .UseSerilog()
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
     }
 }
