@@ -17,6 +17,7 @@ namespace CarvedRock.Api
       .Enrich.FromLogContext()
       .Enrich.WithMachineName()
       .Enrich.WithProperty("Assembly", name)
+      .WriteTo.Seq("http://host.docker.internal:5341")
       .WriteTo.Console()
       .CreateLogger();
 
