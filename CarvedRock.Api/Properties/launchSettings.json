@@ -23,7 +23,10 @@
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
-      "publishAllPorts": true
+      "publishAllPorts": true,
+      "environmentVariables": {
+        "Inventory__NestedProperty": "this-is-not-seem-possible"
+      }
     }
   }
 }
