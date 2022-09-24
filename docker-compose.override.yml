@@ -11,3 +11,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
 
 
+  carvedrock.orderprocessor:
+    environment:
+      - DOTNET_ENVIRONMENT=Development

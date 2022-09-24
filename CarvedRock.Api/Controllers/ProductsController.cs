@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using CarvedRock.Api.ApiModels;
+﻿using CarvedRock.Api.ApiModels;
 using CarvedRock.Api.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CarvedRock.Api.Controllers
 {
-  [ApiController]
+    [ApiController]
     [Route("[controller]")]
     public class ProductsController : ControllerBase
     {
@@ -18,12 +19,12 @@ namespace CarvedRock.Api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Product> GetProducts(string category = "all")
+        public async Task<IEnumerable<Product>> GetProducts(string category = "all")
         {
             Log.ForContext("Category", category)
                 .Information("Starting controller action GetProducts");
 
-            return _productLogic.GetProductsForCategory(category);
+            return await _productLogic.GetProductsForCategory(category);
         }
     }
 }

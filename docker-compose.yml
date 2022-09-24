@@ -11,6 +11,7 @@ services:
       - SimpleProperty="hello-from-compose"
     depends_on:
       - seq_in_dc
+      - rabbit_in_dc
   
   carvedrock.app:
     build:
@@ -20,6 +21,14 @@ services:
       - "8081:80"
     depends_on:
       - seq_in_dc
+      
+  carvedrock.orderprocessor:
+    build:
+      context: .
+      dockerfile: CarvedRock.OrderProcessor/Dockerfile
+    depends_on:
+      - seq_in_dc
+      - rabbit_in_dc
 
   seq_in_dc:
     image: datalust/seq
@@ -27,6 +36,22 @@ services:
       - "8005:80"
     environment:
       - ACCEPT_EULA=Y
+
+  rabbit_in_dc:
+    image: rabbitmq:3-management
+    ports:
+      - "8088:15672"
+
+  sql_in_dc:
+    build:
+      context: .
+      dockerfile: sql/sql.Dockerfile
+    restart: always
+    ports:
+      - "1440:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=!QAZxsw2
 
 
 

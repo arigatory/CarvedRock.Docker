@@ -1,24 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CarvedRock.Api.ApiModels;
 using CarvedRock.Api.Interfaces;
+using CarvedRock.Api.Repository;
 using Microsoft.Extensions.Logging;
 
 namespace CarvedRock.Api.Domain
 {
     public class ProductLogic : IProductLogic
     {
+        private readonly ICarvedRockRepository _repo;
         private readonly ILogger<ProductLogic> _logger;
         private readonly List<string> _validCategories = new List<string> {"all", "boots", "climbing gear", "kayaks"};
 
 
-        public ProductLogic(ILogger<ProductLogic> logger)
+        public ProductLogic(ICarvedRockRepository repo, ILogger<ProductLogic> logger)
         {
+            _repo = repo;
             _logger = logger;
         }
 
-        public IEnumerable<Product> GetProductsForCategory(string category)
+        public async Task<IEnumerable<Product>> GetProductsForCategory(string category)
         {
             _logger.LogInformation("Starting logic to get products", category);
 
@@ -35,9 +39,11 @@ namespace CarvedRock.Api.Domain
                 throw new Exception("Not implemented! No kayaks have been defined in 'database' yet!!!!");
             }
 
-            return GetAllProducts().Where(a =>
-                string.Equals("all", category, StringComparison.InvariantCultureIgnoreCase) ||
-                string.Equals(category, a.Category, StringComparison.InvariantCultureIgnoreCase));
+
+            return await _repo.GetProducts(category);
+            //return GetAllProducts().Where(a =>
+            //    string.Equals("all", category, StringComparison.InvariantCultureIgnoreCase) ||
+            //    string.Equals(category, a.Category, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private static IEnumerable<Product> GetAllProducts()

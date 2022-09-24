@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using CarvedRock.Api.ApiModels;
+﻿using CarvedRock.Api.ApiModels;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CarvedRock.Api.Interfaces
 {
     public interface IProductLogic
     {
-        IEnumerable<Product> GetProductsForCategory(string category);
+        Task<IEnumerable<Product>> GetProductsForCategory(string category);
     }
 }

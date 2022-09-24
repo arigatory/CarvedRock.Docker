@@ -1,4 +1,5 @@
 using CarvedRock.Api.Domain;
+using CarvedRock.Api.Integrations;
 using CarvedRock.Api.Interfaces;
 using CarvedRock.Api.Middleware;
 using Microsoft.AspNetCore.Builder;
@@ -42,6 +43,7 @@ namespace CarvedRock.Api
 
             services.AddScoped<IProductLogic, ProductLogic>();
             services.AddScoped<IQuickOrderLogic, QuickOrderLogic>();
+            services.AddSingleton<IOrderProcessingNotification, OrderProcessingNotification>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
